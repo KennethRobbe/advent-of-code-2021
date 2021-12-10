@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import chalk from 'chalk';
 
 export default class BaseSolver {
     rowSplit = /\r?\n/g;
@@ -6,7 +7,7 @@ export default class BaseSolver {
     inputData = 'input';
 
     async exec() {
-        console.log(`Solving Day ${this.day}`);
+        console.log(chalk.bold.yellow(`Solving Day ${this.day}`));
         await this.solveChallenges();
     }
 
@@ -16,8 +17,12 @@ export default class BaseSolver {
         }
 
         for (const [i, challenge] of this.challenges.entries()) {
-            console.log(`Solving challenge ${i + 1}`);
-            await this.solveChallenge(challenge);
+            try {
+                console.log(chalk.underline(`Solving challenge ${i + 1}`));
+                await this.solveChallenge(challenge);
+            } catch (e) {
+                console.error(chalk.red(e));
+            }
         }
     }
 
@@ -29,12 +34,12 @@ export default class BaseSolver {
                 `Test result doesn't match expected test result: ${testResult} vs. ${challenge.expectedTestResult}`
             );
         } else {
-            console.log(`Test result matches expected result.`);
+            console.log(`Test result matches expected result: ${testResult}`);
         }
 
         // Continue with actual data if test result is correct
         const result = await this.getResult(this.inputData, challenge);
-        console.log(`Result for input: ${result}`);
+        console.log(`Result for input: ${chalk.green.bold(result)}`);
     }
 
     async getResult(inputFile, challenge) {
