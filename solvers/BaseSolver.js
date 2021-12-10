@@ -59,20 +59,24 @@ export default class BaseSolver {
     parseFile(content) {
         if (typeof this.rowSplit !== 'undefined') {
             return content
+                .trim()
                 .split(this.rowSplit)
                 .filter(Boolean)
-                .map((r) => this.parseRow(r));
+                .map((r, i, arr) => this.parseRow(r, i, arr));
         }
 
-        return content;
+        return content.trim();
     }
 
     parseRow(row) {
         if (typeof this.columnSplit !== 'undefined') {
-            return row.split(this.columnSplit).map((d) => this.parseDataPoint(d));
+            return row
+                .trim()
+                .split(this.columnSplit)
+                .map((d, i, arr) => this.parseDataPoint(d, i, arr));
         }
 
-        return this.parseDataPoint(row);
+        return this.parseDataPoint(row.trim());
     }
 
     parseDataPoint(data) {
