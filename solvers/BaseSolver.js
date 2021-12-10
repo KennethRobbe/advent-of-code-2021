@@ -2,6 +2,8 @@ import fs from 'node:fs';
 
 export default class BaseSolver {
     rowSplitRegex = /\r?\n/g;
+    testData = 'test';
+    inputData = 'input';
 
     async exec() {
         console.log(`Solving Day ${this.day}`);
@@ -21,7 +23,7 @@ export default class BaseSolver {
 
     async solveChallenge(challenge) {
         // Check test result first
-        const testResult = await this.getResult(challenge.testData, challenge.method);
+        const testResult = await this.getResult(this.testData, challenge);
         if (testResult !== challenge.expectedTestResult) {
             throw new Error(
                 `Test result doesn't match expected test result: ${testResult} vs. ${challenge.expectedTestResult}`
@@ -31,17 +33,17 @@ export default class BaseSolver {
         }
 
         // Continue with actual data if test result is correct
-        const result = await this.getResult(challenge.inputData, challenge.method);
-        console.log(`Result: ${result}`);
+        const result = await this.getResult(this.inputData, challenge);
+        console.log(`Result for input: ${result}`);
     }
 
-    async getResult(inputFile, method) {
-        if (typeof this[method] !== 'function') {
-            throw new Error(`Method ${method} is unknown!`);
+    async getResult(inputFile, challenge) {
+        if (typeof this[challenge.method] !== 'function') {
+            throw new Error(`Method ${challenge.method} is unknown!`);
         }
 
         const data = await this.readFile(inputFile);
-        return this[method](data);
+        return this[challenge.method](data, challenge.params);
     }
 
     async readFile(fileName) {
@@ -56,7 +58,10 @@ export default class BaseSolver {
 
     parseFile(content) {
         if (this.rowSplitRegex) {
-            return content.split(this.rowSplitRegex).map((r) => this.parseRow(r));
+            return content
+                .split(this.rowSplitRegex)
+                .filter(Boolean)
+                .map((r) => this.parseRow(r));
         }
 
         return content;

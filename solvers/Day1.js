@@ -8,14 +8,13 @@ export default class Day1 extends BaseSolver {
     challenges = [
         {
             method: 'countIncreases',
-            inputData: 'input',
-            testData: 'test',
             expectedTestResult: 7
         },
         {
             method: 'countSlidingWindowIncreases',
-            inputData: 'input',
-            testData: 'test',
+            params: {
+                slidingWindowWidth: 3
+            },
             expectedTestResult: 5
         }
     ];
@@ -32,8 +31,8 @@ export default class Day1 extends BaseSolver {
     // Considering sums of a three-measurement sliding window,
     // count the number of times the sum of measurements in this sliding window
     // increases from the previous sum
-    countSlidingWindowIncreases(data) {
-        const slidingWindowWidth = 3;
+    countSlidingWindowIncreases(data, params) {
+        const slidingWindowWidth = params.slidingWindowWidth;
         const slidingWindowSums = data
             .map((d, i, arr) => {
                 if (i + slidingWindowWidth > arr.length) {
