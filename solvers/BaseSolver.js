@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 
 export default class BaseSolver {
-    rowSplitRegex = /\r?\n/g;
+    rowSplit = /\r?\n/g;
     testData = 'test';
     inputData = 'input';
 
@@ -57,9 +57,9 @@ export default class BaseSolver {
     }
 
     parseFile(content) {
-        if (this.rowSplitRegex) {
+        if (typeof this.rowSplit !== 'undefined') {
             return content
-                .split(this.rowSplitRegex)
+                .split(this.rowSplit)
                 .filter(Boolean)
                 .map((r) => this.parseRow(r));
         }
@@ -68,8 +68,8 @@ export default class BaseSolver {
     }
 
     parseRow(row) {
-        if (this.columnSplitRegex) {
-            return row.split(this.columnSplitRegex).map((d) => this.parseDataPoint(d));
+        if (typeof this.columnSplit !== 'undefined') {
+            return row.split(this.columnSplit).map((d) => this.parseDataPoint(d));
         }
 
         return this.parseDataPoint(row);

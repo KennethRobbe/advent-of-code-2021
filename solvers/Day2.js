@@ -1,10 +1,10 @@
 import BaseSolver from './BaseSolver.js';
 
 /**
- * Solver for https://adventofcode.com/2021/day/1
+ * Solver for https://adventofcode.com/2021/day/2
  */
-export default class Day1 extends BaseSolver {
-    columnSplitRegex = /\s/g;
+export default class Day2 extends BaseSolver {
+    columnSplit = /\s/g;
     day = 2;
     challenges = [
         {
